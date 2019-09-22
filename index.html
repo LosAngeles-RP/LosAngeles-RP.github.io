@@ -143,6 +143,60 @@ VK.Widgets.CommunityMessages("vk_community_messages", 150580783, {widgetPosition
 <p><br><br/></p>
 
 
+    </div>
+    <div class="container">
+      <div class="row">
+        <?php
+        $stmt = $pdo->prepare("SELECT serverip, serverport FROM serverlist");
+        $stmt->execute();
+        while ($svdata = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+        $svip = $svdata['serverip'];
+        $svp = $svdata['serverport'];
+        $svipp = $svip.':'.$svp; //merge ip and port number
+        $Query = new SourceQuery( );
+      	try
+      	{
+      		$Query->Connect( $svip, $svp, 1, SourceQuery::SOURCE );
+      		$svqdata = ( $Query->GetInfo( ) );
+          echo '<div class="col-md-6">
+            <a class="sv-joinbtn" href="steam://connect/46.174.52.244:27015'.$svipp.'">
+              <i class="fa fa-paper-plane" aria-hidden="true"></i>
+              <div>connect</div>
+            </a>
+            <div class="sv-wrapper">
+              <div class="sv-apptitle">'.$svqdata['ModDir'].'</div>
+              <div class="sv-title">'.$svqdata['HostName'].'</div>
+              <hr>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="sv-cnumber">'.$svqdata['Players'].'<b> / players</b></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="sv-cnumber">'.$svqdata['MaxPlayers'].' <b>/ max</b></div>
+                </div>
+              </div>
+              <hr>
+              <div class="sv-cinfo">'.$svipp.'</div>
+              <br>
+            </div>
+          </div>';
+      	}
+      	catch( Exception $e )
+      	{
+      		echo $e->getMessage( );
+      	}
+      	finally
+      	{
+      		$Query->Disconnect( );
+      	}
+        }?>
+    </div>
+    </div>
+</div>
+
+
+
 <p>
 <span style="color: #333333;">
 <span style="border-image: initial; margin-right: auto; margin-left: auto;">
